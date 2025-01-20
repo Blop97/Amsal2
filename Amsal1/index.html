@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Hunt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin: 50px auto;
+            max-width: 600px;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #ff4500;
+        }
+        .clue {
+            margin: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #008cba;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005f73;
+        }
+        .map {
+            margin: 20px 0;
+        }
+        .surprise {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #006400;
+        }
+        .video-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chalo, shuru karte!</h1>
+        <p>Follow the clues to find the treasure. Good luck!</p>
+
+        <!-- Clue 1 -->
+        <div id="clue-1" class="clue">
+            <p><strong>Clue 1:</strong> "Tum abhi ghar par ho?" (ANS: "yes" OR "no")</p>
+            <input type="text" id="answer-1" placeholder="Your answer here">
+            <button onclick="checkAnswer(1, 'yes')">Submit</button>
+        </div>
+
+        <!-- Video -->
+        <div id="video-1" class="video-container hidden">
+            <iframe id="video-iframe" width="100%" height="315"
+                src="https://drive.google.com/file/d/1uDmzth6hBxXMtpjhtLBF-8qhPtSzBePo/preview"
+                frameborder="0" allow="autoplay" allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Continue Button -->
+        <button id="continue-btn" class="hidden" onclick="continueToNext()">Continue</button>
+
+        <!-- Clue 2 -->
+        <div id="clue-2" class="clue hidden">
+            <p><strong>Clue 2:</strong> "Are you smart? yes and no 😅"</p>
+            <input type="text" id="answer-2" placeholder="Your answer here">
+            <button onclick="checkAnswer(2, 'yes')">Submit</button>
+        </div>
+
+        <!-- Clue 3 -->
+        <div id="clue-3" class="clue hidden">
+            <p><strong>Clue 3:</strong> Are you sure 🤔</p>
+            <input type="text" id="answer-3" placeholder="Your answer here">
+            <button onclick="checkAnswer(3, 'yes')">Submit</button>
+        </div>
+
+        <!-- Clue 4 -->
+        <div id="clue-4" class="clue hidden">
+            <p><strong>Clue 4:</strong> Acha phr batao 200 - 57? Kitne hua?</p>
+            <input type="text" id="answer-4" placeholder="Your answer here">
+            <button onclick="checkAnswer(4, '143')">Submit</button>
+        </div>
+
+        <!-- Message After Clue 4 -->
+        <div id="message-after-clue-4" class="hidden">
+            <p class="surprise">Are pagli, yeh bhi koi time hai romance karne? Uff, acha acha, aise mat dekho, warna dil ka brake fail ho jayega! I love you too, meri drama queen! 😜❤️</p>
+            <button onclick="showTreasure()">Next</button>
+        </div>
+
+        <!-- Treasure -->
+        <div id="treasure" class="hidden">
+            <p class="surprise">🎉 Congratulations! You’ve found the treasure! 🎉</p>
+            <p>Here’s your reward:</p>
+            <a href="https://drive.google.com/file/d/1yZc0OnZ_tjgPM5eYa0VjqplKUXKUM3V0/view?usp=drive_link" target="_blank">🎁 Chhota sa gift tumhare liye 🎁</a>
+        </div>
+
+        <!-- Progress Map -->
+        <div class="map">
+            <p><strong>Progress:</strong></p>
+            <div id="progress">🔒 🔒 🔒 🔒</div>
+        </div>
+    </div>
+
+    <script>
+        let progress = [false, false, false, false];
+
+        function checkAnswer(clueNumber, correctAnswer) {
+            const userAnswer = document.getElementById(`answer-${clueNumber}`).value.toLowerCase().trim();
+            if (userAnswer === correctAnswer) {
+                document.getElementById(`clue-${clueNumber}`).classList.add('hidden');
+                
+                if (clueNumber === 1) {
+                    // Show video after Clue 1
+                    document.getElementById('video-1').classList.remove('hidden');
+                    document.getElementById('continue-btn').classList.remove('hidden');
+                } else if (clueNumber === 4) {
+                    // Show message after Clue 4
+                    document.getElementById('message-after-clue-4').classList.remove('hidden');
+                } else {
+                    // Move to next clue
+                    const nextClue = document.getElementById(`clue-${clueNumber + 1}`);
+                    if (nextClue) {
+                        nextClue.classList.remove('hidden');
+                    }
+                }
+                progress[clueNumber - 1] = true;
+                updateProgress();
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        function updateProgress() {
+            const map = progress.map(p => (p ? '✅' : '🔒')).join(' ');
+            document.getElementById('progress').textContent = map;
+        }
+
+        function continueToNext() {
+            document.getElementById('continue-btn').classList.add('hidden');
+            document.getElementById('video-1').classList.add('hidden');
+            document.getElementById('clue-2').classList.remove('hidden');
+        }
+
+        function showTreasure() {
+            document.getElementById('message-after-clue-4').classList.add('hidden');
+            document.getElementById('treasure').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
